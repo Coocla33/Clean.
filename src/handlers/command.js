@@ -194,12 +194,10 @@ let checkPerms = function(msg, perms) {
   let userMissing = {'type': 'user', 'array': []}
   let botMissing = {'type': 'bot', 'array': []}
   for (let perm of perms) {
-    if (!msg.channel.permissionsFor(msg.author).hasPermission(perm)) {
-      console.log('user no perm')
+    if (!msg.channel.permissionsFor(msg.author).has(perm)) {
       userMissing.array.push(perm)
     }
-    if (!msg.channel.permissionsFor(bot.user).hasPermission(perm)) {
-      console.log('bot no perm')
+    if (!msg.channel.permissionsFor(bot.user).has(perm)) {
       botMissing.array.push(perm)
     }
   }

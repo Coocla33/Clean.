@@ -35,7 +35,7 @@ exports.run = function(msg, data) {
             data: [],
             spanGaps: false
           }, {
-            label: 'User Growth',
+            label: 'Total User Count',
             fill: true,
             lineTension: 0,
             backgroundColor: 'rgba(52, 152, 219, 0.4)',

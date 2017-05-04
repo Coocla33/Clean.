@@ -9,7 +9,7 @@ const chartjs = require('chartjs-node')
 
 exports.run = function(msg, data) {
   return new Promise((resolve, reject) => {
-    msg.channel.sendMessage('Generating Image, this might take a while...').then((Msg) => {
+    msg.channel.send('Generating Image, this might take a while...').then((Msg) => {
       let graphObject = {}
       let graphData = {
         'labels': [],
@@ -27,9 +27,9 @@ exports.run = function(msg, data) {
             graphObject[member.presence.status].count++
           } else {
             graphObject[member.presence.status] = {'count': 1, 'color': ''}
-            if (member.presence.status == 'online') {graphObject[member.presence.status].color = '#62ff84'}
-            else if (member.presence.status == 'dnd') {graphObject[member.presence.status].color = '#FF6384'}
-            else {graphObject[member.presence.status].color = '#fff161'}
+            if (member.presence.status == 'online') {graphObject[member.presence.status].color = 'rgb(52, 219, 73)'}
+            else if (member.presence.status == 'dnd') {graphObject[member.presence.status].color = 'rgb(219, 52, 52)'}
+            else {graphObject[member.presence.status].color = 'rgb(216, 219, 52)'}
           }
         }
       }
@@ -44,7 +44,9 @@ exports.run = function(msg, data) {
       chart.drawChart({
         'type': 'pie',
         'data': graphData,
-        'options': {}
+        'options': {
+          'cutoutPercentage': 5
+        }
       }).then(() => {
         return chart.getImageBuffer('image/png')
       }).then((buffer) => {
