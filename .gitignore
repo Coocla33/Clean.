@@ -1,9 +1,5 @@
 node_modules/
 
-config.json
-
 src/cache/*
 src/data/*
-src/cache/usergrowth.png
 src/config.json
-src/data/guilds
