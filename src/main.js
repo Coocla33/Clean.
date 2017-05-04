@@ -24,11 +24,6 @@ handlerSetup.setup().then((handlers) => {
   console.log(err)
 })
 
-
-Array.prototype.sample = function() {
-  return this[Math.floor(Math.random() * this.length)]
-}
-
 //Load Commands
 function loadCommands() {
   handlers.command.load().then((commands) => {

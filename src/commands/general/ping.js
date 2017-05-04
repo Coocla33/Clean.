@@ -11,7 +11,7 @@ exports.run = function(msg, data) {
     let date = new Date()
     msg.channel.send('...').then((Msg) => {
       let responseObject = ['Pong! ', 'Pang! ', 'Bang! ', 'Rate Limited! ']
-      Msg.edit(responseObject.sample() + '(' + (new Date() - date) + 'ms)').catch((err) => {reject(err)})
+      Msg.edit(responseObject[Math.floor(Math.random() * responseObject.length)] + '(' + (new Date() - date) + 'ms)').catch((err) => {reject(err)})
     }).catch((err) => {reject(err)})
   })
 }

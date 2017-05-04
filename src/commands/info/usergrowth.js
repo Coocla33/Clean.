@@ -18,7 +18,7 @@ exports.run = function(msg, data) {
           {
             label: 'User Growth',
             fill: true,
-            lineTenstion: 0.1,
+            lineTension: 0,
             backgroundColor: 'rgba(219, 52, 124, 0.4)',
             borderColor: 'rgb(219, 52, 124)',
             borderCapStyle: 'butt',
@@ -37,7 +37,7 @@ exports.run = function(msg, data) {
           }, {
             label: 'User Growth',
             fill: true,
-            lineTenstion: 0.1,
+            lineTension: 0,
             backgroundColor: 'rgba(52, 152, 219, 0.4)',
             borderColor: 'rgb(52, 152, 219)',
             borderCapStyle: 'butt',
@@ -88,6 +88,7 @@ exports.run = function(msg, data) {
         'type': 'line',
         'data': graphData,
         'options': {
+          'scaleFontColor': 'white',
           'title': {
             'display': true,
             'fontSize': 32,
@@ -97,23 +98,23 @@ exports.run = function(msg, data) {
           'scales': {
             'xAxes': [{
               'ticks': {
-                'fontSize': 16,
+                'fontSize': 20,
                 'fontColor': 'white'
               },
               'gridLines': {
                 'display': true,
-                'color': '#FFFFFF'
-              },
+                'color': 'rgb(150, 150, 150)'
+              }
             }],
             'yAxes': [{
               'ticks': {
                 'fontSize': 24,
-                'fontColor': 'rgb(150, 150, 150)'
+                'fontColor': 'white'
               },
               'gridLines': {
                 'display': true,
                 'color': 'rgb(150, 150, 150)'
-              },
+              }
             }]
           }
         }
@@ -125,7 +126,7 @@ exports.run = function(msg, data) {
         return chart.writeImageToFile('image/png', './src/cache/usergrowth.png')
       }).then(() => {
         Msg.delete()
-        Msg.channel.send({files: ['./src/cache/usergrowth.png']}).catch((err) => {reject(err)})
+        msg.channel.send({file: './src/cache/usergrowth.png'}).catch((err) => {reject(err)})
       }).catch((err) => {
         reject(err)
       })
