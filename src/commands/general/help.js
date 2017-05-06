@@ -24,17 +24,20 @@ exports.run = function(msg, data) {
               {
                 'name': 'Usage',
                 'value': '`' + command.usage + '`'
-              }, {
-                'name': 'DM',
-                'value': '`' + command.dm + '`'
               }
             ]
+          }
+          if (command.dm) {
+            embed.fields.push({'name': 'Aliases', 'value': command.dm})
           }
           if (command.aliases && command.aliases.length > 0) {
             embed.fields.push({'name': 'Aliases', 'value': '`' + command.aliases.join('`,`') + '`'})
           }
           if (command.permissions && command.permissions.length > 0) {
             embed.fields.push({'name': 'Permissions', 'value': '`' + command.permissions.join('`,`') + '`'})
+          }
+          if (command.note) {
+            embed.fields.push({'name': 'Additional Notes', 'value': command.note})
           }
           msg.channel.send('', {embed}).catch((err) => {reject(err)})
         } else {

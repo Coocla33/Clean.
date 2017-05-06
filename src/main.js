@@ -14,6 +14,7 @@ let startup = {'date': new Date(), 'started': false}
 global.config = config
 global.bot = bot
 global.data = {suffix: '', usage: 0}
+global.srcDirectory = __dirname
 
 //Handler setup
 handlerSetup.setup().then((handlers) => {
