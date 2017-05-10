@@ -170,7 +170,7 @@
           let cache = []
           for (let type in data) {
             for (let command in data[type]) {
-              if (type != 'Aunlisted' && type != 'Adeveloper') {
+              if (type != 'unlisted' && type != 'developer') {
                 let htmlObject = []
                 let badge = {'color': '', 'type': ''}
                 if (data[type][command].new) {
