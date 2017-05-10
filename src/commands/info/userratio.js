@@ -2,7 +2,8 @@ exports.data = {
   'name': 'UserRatio',
   'aliases': ['ur'],
   'desc': 'Showing the ratio of users, bots and nitro users in a pie chart!',
-  'usage': 'userratio'
+  'usage': 'userratio',
+  'new': true
 }
 
 const chartjs = require('chartjs-node')

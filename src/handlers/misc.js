@@ -11,5 +11,5 @@ exports.embedColor = function(msg) {
 }
 
 exports.msToRead = function(ms) {
-  return moment.duration(Number(ms), 'ms').format('Y[y], M[MM], d[d], h[h], m[m], s[s and] S[ms]')
+  return moment.duration(Number(ms), 'ms').format('Y[y], M[MM], d[d], h[h], m[m and] s[s]')
 }

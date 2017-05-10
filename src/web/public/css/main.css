@@ -1,0 +1,135 @@
+body {
+  background-color: #e5e5e5;
+}
+
+hr {
+  border-color: #d5d5d5;
+}
+
+.row {
+  margin-bottom: 20px;
+}
+
+.inline > span {
+  display: inline-block;
+  margin: 5%;
+  margin-bottom: 0px;
+}
+
+.stats h3 {
+  display: inline;
+  padding-left: 16px;
+  padding-right: 16px;
+  color: black;
+  background-color: #f5f5f5;
+}
+
+.box-overlay {
+  border: solid 1px #d5d5d5;
+  background-color: #f5f5f5;
+  margin-bottom: 20px;
+}
+
+/* #f5f5f5; */
+
+.center {
+  text-align: center;
+}
+
+.navbar-default {
+  border-color: #d5d5d5;
+  background-color: #f5f5f5;
+}
+
+.filled {
+  border: solid 1px #d5d5d5;
+  background-color: #f5f5f5;
+}
+
+#statLine {
+  width: 96%;
+}
+
+.statsHeader {
+  margin-bottom: -32px;
+}
+
+.commandName {
+  vertical-align: middle;
+}
+
+.commandBadge {
+  vertical-align: middle;
+  margin-top: -0.3em;
+}
+
+.badge-red {
+  background-color: #d9534f;
+}
+
+.badge-orange {
+  background-color: #f0ad4e;
+}
+
+.badge-green {
+  background-color: #5cb85c;
+}
+
+.badge-lightblue {
+  background-color: #5bc0de;
+}
+
+.badge-blue {
+  background-color: #337ab7;
+}
+
+.rotate {
+  animation-name: rotateCog;
+  animation-duration: 1s;
+  animation-delay: 5s;
+  animation-iteration-count: infinite;
+  animation: rotateCog 8s infinite;
+}
+
+@media screen and (min-width: 1200px) {
+    #statLine {
+      margin-top: 64px;
+      margin-bottom: -72px;
+    }
+}
+
+@media screen and (min-width: 992px) and (max-width: 1199px) {
+  #statLine {
+    margin-top: 64px;
+    margin-bottom: -62px;
+  }
+}
+
+@media screen and (max-width: 991px) {
+  #statLine {
+    display: none;
+  }
+
+  .inline h3 {
+    background-color: rgba(0, 0, 0, 0)
+  }
+
+  .statsHeader {
+    margin-bottom: -16px;
+  }
+}
+
+@keyframes rotateCog {
+  0% {
+    transform: rotate(0deg);
+  }
+  80% {
+    transform: rotate(0deg);
+  }
+  90% {
+    transform: rotate(45deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}

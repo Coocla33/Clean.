@@ -2,7 +2,8 @@ exports.data = {
   'name': 'UserStatus',
   'aliases': ['us'],
   'desc': 'Show the status of your users, in a fancy pie chart!',
-  'usage': 'userstatus'
+  'usage': 'userstatus',
+  'new': true
 }
 
 const chartjs = require('chartjs-node')

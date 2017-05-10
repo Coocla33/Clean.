@@ -4,6 +4,8 @@ exports.data = {
   'desc': 'sample text',
   'usage': 'sample text',
   'dm': true,
+  'new': false,
+  'indev': true,
   'permissions': []
 }
 
