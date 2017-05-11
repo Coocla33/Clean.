@@ -31,6 +31,8 @@ handlerSetup.setup().then((handlers) => {
 function loadCommands() {
   handlers.command.load().then((commands) => {
     console.log(handlers.logger.info(new Date()) + 'Loaded ' + commands.array.length + ' commands (' + (new Date() - startup.date) + 'ms)')
+  }).catch((err) => {
+    console.log(err)
   })
 }
 
@@ -61,7 +63,12 @@ function loadServer() {
 bot.on('message', (msg) => {
   handlers.command.execute(msg).then((response) => {
     if (response.type == 'default') {
-      msg.channel.sendMessage(':no_entry: **' + response.response + '** `' + config.prefix + 'help ' + response.command + '`')
+      msg.channel.send(':no_entry: **' + response.response + '** `' + config.prefix + 'help ' + response.command + '`').then((Msg) => {
+        let deleteMsg = function() {
+          Msg.delete()
+        }
+        setTimeout(deleteMsg, 1000)
+      })
     } else if (response.type == 'error') {
       for (let id of config.master) {
         bot.fetchUser(id).then((user) => {
@@ -69,7 +76,12 @@ bot.on('message', (msg) => {
           user.send('**ERROR! (' + response.command.toUpperCase() + ')** ```js\n' + response.err.stack + '```')
         })
       }
-      msg.channel.send('An unexpected error has accured! This has been automaticly reported to the developers!')
+      msg.channel.send('An unexpected error has accured! This has been automaticly reported to the developers!').then((Msg) => {
+        let deleteMsg = function() {
+          Msg.delete()
+        }
+        setTimeout(deleteMsg, 10000)
+      })
     }
   }).catch((err) => {
     console.error(err)
