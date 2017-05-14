@@ -13,7 +13,7 @@ exports.web = function(date) {
 }
 
 exports.connect = function(date) {
-  return logTime(date) = chalk.bold.green('[CONNECTION] ')
+  return logTime(date) + chalk.bold.green('[CONNECTION] ')
 }
 
 let logTime = function(date) {

@@ -1,5 +1,6 @@
 const fs = require('fs')
 const path = require('path')
+const webServer = require('../web/server.js')
 
 var stats = {'usage': 0}
 
@@ -245,6 +246,7 @@ let executeCommand = function(msg, command) {
   return new Promise((resolve, reject) => {
     data.usage = data.usage + 1
     console.log(handlers.logger.info(new Date()) + msg.author.username + '#' + msg.author.discriminator + ' used the following command: [' + msg.content.substr(config.prefix.length) + ']')
+    webServer.updateStats()
     commands.all[commands.list[command].type][commands.list[command].name].run(msg, data).then((response) => {
       resolve({'type': 'default', 'response': response, 'command': command})
     }).catch((err) => {

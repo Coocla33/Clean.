@@ -104,20 +104,20 @@
             <hr id="statLine">
             <div class="col s12 center inline stats">
               <span>
-                <h3 id="user-count">...</h3>
+                <h3 id="user-count">0</h3>
                 <p>Total Users</p>
               </span>
               <span>
-                <h3 id="guild-count">...</h3>
+                <h3 id="guild-count">0</h3>
                 <p>Total Guilds</p>
               </span>
               <span>
-                <h3 id="channel-count">...</h3>
+                <h3 id="channel-count">0</h3>
                 <p>Total Channels</p>
               </span>
               <span>
-                <h3 id="uptime">...</h3>
-                <p>Uptime</p>
+                <h3 id="command-usage">0</h3>
+                <p>Commands Used</p>
               </span>
             </div>
           </div>
@@ -140,30 +140,65 @@
       </div>
     </div>
 
+    <div class="footer">
+      <div class="container" style="color: #333; padding: 0px;">
+        <p class="text-muted text-center">Made with <span class="glyphicon glyphicon-heart"></span> by <a class="footer-link" href="https://github.com/coocla33" style="text-decoration: none;">Coocla33</a></p>
+      </div>
+    </div>
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="./js/countUp.min.js"></script>
     <script src='/socket.io/socket.io.js'></script>
     <script>
       $(function() {
         let socket = io.connect()
-        let userCount = $('#user-count')
-        let guildCount = $('#guild-count')
-        let channelCount = $('#channel-count')
-        let uptime = $('#uptime')
         let commandContainer = $('#commandContainer')
 
         socket.emit('getStats')
         socket.emit('getCommands')
 
-        socket.on('updateStats', (stats) => {
-          userCount.text(stats.userCount)
-          guildCount.text(stats.guildCount)
-          channelCount.text(stats.channelCount)
-          uptime.text(stats.uptime)
+        socket.on('setStats', (stats) => {
+          let options = {
+            'useEasing': true,
+            'useGrouping': true,
+            'separator': '.',
+            'decimal': ',',
+            'prefix': '',
+            'suffix': ''
+          }
+
+          console.log(stats)
+          let userCountUp = new CountUp('user-count', 0, stats.userCount, 0, 5)
+          let guildCountUp = new CountUp('guild-count', 0, stats.guildCount, 0, 5)
+          let channelCountUp = new CountUp('channel-count', 0, stats.channelCount, 0, 5)
+          let commandCountUp = new CountUp('command-usage', 0, stats.commandCount, 0, 5)
+
+          let userCount = $('user-count')
+          console.log(userCount)
+
+          userCountUp.start()
+          guildCountUp.start()
+          channelCountUp.start()
+          commandCountUp.start()
         })
 
-        socket.on('updateUptime', (Uptime) => {
-          uptime.text(Uptime)
+        socket.on('updateStats', (stats) => {
+          let userCount = $('#user-count')
+          let guildCount = $('#guild-count')
+          let channelCount = $('#channel-count')
+          let commandUsage = $('#command-usage')
+
+          console.log(userCount.text())
+
+          let userCountUp = new CountUp('user-count', Number(userCount.text()), stats.userCount, 0, 5)
+          let guildCountUp = new CountUp('guild-count', Number(guildCount.text()), stats.guildCount, 0, 5)
+          let channelCountUp = new CountUp('channel-count', Number(channelCount.text()), stats.channelCount, 0, 5)
+          let commandCountUp = new CountUp('command-usage', Number(commandUsage.text()), stats.commandCount, 0, 5)
+          userCountUp.start()
+          guildCountUp.start()
+          channelCountUp.start()
+          commandCountUp.start()
         })
 
         socket.on('updateCommands', (data) => {
@@ -203,20 +238,24 @@
           }
           let objectsLeft = cache.length - Math.floor(cache.length / 4) * 4
           let final = []
+          let offset = 0.2
           for (let i in cache) {
             if (i >= cache.length - objectsLeft) {
               if (objectsLeft == 1) {
-                final.push('<div class="col-md-12">' + cache[i] + '</div>')
+                final.push('<div class="col-md-12 commandAnimation" style="animation-delay: ' + offset + 's";>' + cache[i] + '</div>')
+                offset += 0.2
               } else if (objectsLeft == 2) {
-                final.push('<div class="col-md-6">' + cache[i] + '</div>')
+                final.push('<div class="col-md-6 commandAnimation" style="animation-delay: ' + offset + 's";>' + cache[i] + '</div>')
+                offset += 0.2
               } else {
-                final.push('<div class="col-md-4">' + cache[i] + '</div>')
+                final.push('<div class="col-md-4 commandAnimation commandAnimation" style="animation-delay: ' + offset + 's";>' + cache[i] + '</div>')
+                offset += 0.2
               }
             } else {
-              final.push('<div class="col-md-3">' + cache[i] + '</div>')
+              final.push('<div class="col-md-3 commandAnimation" style="animation-delay: ' + offset + 's";>' + cache[i] + '</div>')
+              offset += 0.2
             }
           }
-          console.log(data)
           commandContainer.html(final.join(''))
         })
 

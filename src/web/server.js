@@ -33,7 +33,7 @@ io.sockets.on('connection', function(socket) {
 
   //Get Statistics
   socket.on('getStats', function() {
-    socket.emit('updateStats', {'userCount': bot.users.size, 'guildCount': bot.guilds.size, 'channelCount': bot.channels.size, 'uptime': handlers.misc.msToRead(bot.uptime)})
+    io.sockets.emit('setStats', {'userCount': bot.users.size, 'guildCount': bot.guilds.size, 'channelCount': bot.channels.size, 'commandCount': data.usage, 'uptime': handlers.misc.msToRead(bot.uptime)})
   })
 
   //Get Commands
@@ -70,10 +70,5 @@ io.sockets.on('connection', function(socket) {
 })
 
 exports.updateStats = function() {
-  io.sockets.emit('updateStats', {'userCount': bot.users.size, 'guildCount': bot.guilds.size, 'channelCount': bot.channels.size, 'uptime': handlers.misc.msToRead(bot.uptime)})
-}
-
-function updateUptime() {
-  io.sockets.emit('updateUptime', handlers.misc.msToRead(bot.uptime))
-  setTimeout(updateUptime, 1000)
+  io.sockets.emit('updateStats', {'userCount': bot.users.size, 'guildCount': bot.guilds.size, 'channelCount': bot.channels.size, 'commandCount': data.usage, 'uptime': handlers.misc.msToRead(bot.uptime)})
 }

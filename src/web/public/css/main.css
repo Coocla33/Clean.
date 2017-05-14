@@ -91,6 +91,23 @@ hr {
   animation: rotateCog 8s infinite;
 }
 
+.footer-link {
+  transition: color .5s;
+  color: #777;
+}
+
+.footer-link:hover {
+  transition: color .5s;
+  color: #333;
+}
+
+.commandAnimation {
+  opacity: 0;
+  animation-name: commandAnimation;
+  animation-duration: 1s;
+  animation-fill-mode: forwards;
+}
+
 @media screen and (min-width: 1200px) {
     #statLine {
       margin-top: 64px;
@@ -131,5 +148,16 @@ hr {
   }
   100% {
     transform: rotate(0deg);
+  }
+}
+
+@keyframes commandAnimation {
+  0% {
+    opacity: 0;
+    transform: translateY(-25px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0px);
   }
 }
