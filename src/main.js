@@ -67,7 +67,7 @@ bot.on('message', (msg) => {
         let deleteMsg = function() {
           Msg.delete()
         }
-        setTimeout(deleteMsg, 1000)
+        setTimeout(deleteMsg, 10000)
       })
     } else if (response.type == 'error') {
       for (let id of config.master) {
