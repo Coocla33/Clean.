@@ -16,14 +16,18 @@ exports.load = function() {
             if (!commands.all[directoryObject]) {
               commands.all[directoryObject] = {}
             }
-            let command = require(__dirname + '/../commands/' + directoryObject + '/' + commandFile)
-            commands.all[directoryObject][commandFile.slice(0, -3).toLowerCase()] = command
-            commands.list[commandFile.slice(0, -3).toLowerCase()] = {'name': commandFile.slice(0, -3).toLowerCase(), 'type': directoryObject}
-            commands.array.push(commandFile.slice(0, -3))
-            if (command.data.aliases) {
-              for (let alias of command.data.aliases) {
-                commands.list[alias] = {'name': commandFile.slice(0, -3).toLowerCase(), 'type': directoryObject}
+            try {
+              let command = require(__dirname + '/../commands/' + directoryObject + '/' + commandFile)
+              commands.all[directoryObject][commandFile.slice(0, -3).toLowerCase()] = command
+              commands.list[commandFile.slice(0, -3).toLowerCase()] = {'name': commandFile.slice(0, -3).toLowerCase(), 'type': directoryObject}
+              commands.array.push(commandFile.slice(0, -3))
+              if (command.data.aliases) {
+                for (let alias of command.data.aliases) {
+                  commands.list[alias] = {'name': commandFile.slice(0, -3).toLowerCase(), 'type': directoryObject}
+                }
               }
+            } catch(err) {
+              console.log(handlers.logger.warn(new Date()) + 'Failed to load ' + commandFile.slice(0, -3).toLowerCase() + ' command. (' + err + ')')
             }
           }
         }

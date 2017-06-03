@@ -8,6 +8,10 @@ exports.info = function(date) {
   return logTime(date) + chalk.bold.yellow('[INFO] ')
 }
 
+exports.warn = function(date) {
+  return logTime(date) + chalk.bold.red('[WARNING] ')
+}
+
 exports.web = function(date) {
   return logTime(date) + chalk.bold.magenta('[WEB] ')
 }

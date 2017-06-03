@@ -59,24 +59,26 @@ exports.run = function(msg, data) {
       }
       for (let type in commands.all) {
         if (config.master.indexOf(msg.author.id) > -1) {
-          let length = 0
-          let list = []
-          for (let command in commands.all[type]) {
-            length = length + 1
-            list.push('├ ' + commands.all[type][command].data.name)
-          }
-          if (length > 1) {
-            for (let i in list) {
-              if (i == 0) {
-                list[i] = '┌ ' + commands.all[type][list[i].toLowerCase().split(' ')[1]].data.name
-              } else if (i == length - 1) {
-                list[i] = '└ ' + commands.all[type][list[i].toLowerCase().split(' ')[1]].data.name
-              }
+          if (type != 'unlisted') {
+            let length = 0
+            let list = []
+            for (let command in commands.all[type]) {
+              length = length + 1
+              list.push('├ ' + commands.all[type][command].data.name)
             }
-          } else {
-            list[0] = '─ ' + commands.all[type][list[0].toLowerCase().split(' ')[1]].data.name
+            if (length > 1) {
+              for (let i in list) {
+                if (i == 0) {
+                  list[i] = '┌ ' + commands.all[type][list[i].toLowerCase().split(' ')[1]].data.name
+                } else if (i == length - 1) {
+                  list[i] = '└ ' + commands.all[type][list[i].toLowerCase().split(' ')[1]].data.name
+                }
+              }
+            } else {
+              list[0] = '─ ' + commands.all[type][list[0].toLowerCase().split(' ')[1]].data.name
+            }
+            embed.fields.push({'inline': true, 'name': type + ' (' + list.length + ')', 'value': list.join('\n')})
           }
-          embed.fields.push({'inline': true, 'name': type + ' (' + list.length + ')', 'value': list.join('\n')})
         } else {
           if (type != 'developer' && type != 'unlisted') {
             let length = 0

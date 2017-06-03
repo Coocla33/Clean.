@@ -7,6 +7,7 @@
     <title>Clean.</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/main.css">
+    <script src="https://use.fontawesome.com/a22fac2407.js"></script>
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -16,7 +17,6 @@
     <nav class="navbar navbar-default navbar-fixed-top">
       <div class="container-fluid">
         <div class="navbar-header">
-
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
             <span class="sr-only">Toggle navigation</span>
             <span class="icon-bar"></span>
@@ -45,11 +45,19 @@
           </ul>
 
           <ul class="nav navbar-nav navbar-right">
-            <li>
-              <a href="#" target="_blank">Support Server</a>
-            </li>
-            <li>
-              <a href="https://discordapp.com/oauth2/authorize?client_id=305821126083215380&scope=bot" target="_blank">Bot Invite</a>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">External Links <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li>
+                  <a href="#" target="_blank"><span class="fa fa-user"></span> Support Server</a>
+                </li>
+                <li>
+                  <a href="https://discordapp.com/oauth2/authorize?client_id=305821126083215380&scope=bot" target="_blank"><span class="fa fa-plus"></span> Bot Invite</a>
+                </li>
+                <li>
+                  <a href="https://github.com/Coocla33/Clean." target="_blank"><span class="fa fa-github"></span> Github</a>
+                </li>
+              </ul>
             </li>
           </ul>
         </div>
@@ -142,7 +150,7 @@
 
     <div class="footer">
       <div class="container" style="color: #333; padding: 0px;">
-        <p class="text-muted text-center">Made with <span class="glyphicon glyphicon-heart"></span> by <a class="footer-link" href="https://github.com/coocla33" style="text-decoration: none;">Coocla33</a></p>
+        <p class="text-muted text-center" style="margin-top: -32px; margin-bottom: 24px;">Made with <span class="glyphicon glyphicon-heart"></span> by <a class="footer-link" href="https://coocla33.com" style="text-decoration: none;">Coocla33</a></p>
       </div>
     </div>
 
@@ -271,6 +279,15 @@
           }
         });
       })
+
+      $('.dropdown').on('show.bs.dropdown', function() {
+        $(this).find('.dropdown-menu').first().stop(true, true).slideDown();
+      });
+
+      $('.dropdown').on('hide.bs.dropdown', function() {
+        $(this).find('.dropdown-menu').first().stop(true, true).slideUp();
+      });
+
     </script>
   </body>
 </html>

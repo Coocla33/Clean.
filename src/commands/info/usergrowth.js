@@ -2,8 +2,7 @@ exports.data = {
   'name': 'UserGrowth',
   'aliases': ['ug'],
   'desc': 'Showing the growth of the guild with a nice graph!',
-  'usage': 'usergrowth',
-  'new': true
+  'usage': 'usergrowth'
 }
 
 const chartjs = require('chartjs-node')
