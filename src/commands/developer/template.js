@@ -6,7 +6,8 @@ exports.data = {
   'dm': true,
   'new': false,
   'indev': true,
-  'permissions': []
+  'note': 'This is a template',
+  'permissions': ['SEND_MESSAGES']
 }
 
 exports.run = function(msg, data) {
