@@ -20,79 +20,87 @@ exports.run = function(msg, data) {
 
           //Check if there are any results
           if (results.length > 0) {
-            let anime = results[0]
 
-            //Create basic embed
-            let embed = {
-              'color': handlers.misc.embedColor(msg),
-              'timestamp': new Date(),
-              'footer': {
-                'text': '© Clean.'
-              },
-              'fields': []
-            }
+            //Setup Variables
+            let anime = results[0]
+            let messageArray = []
+            let title = ''
 
             //Title
             if (anime.attributes.titles.ja_jp) {
-              embed.title = anime.attributes.canonicalTitle + ' (' + anime.attributes.titles.ja_jp + ')'
+              title = ':white_flower: **' + anime.attributes.canonicalTitle + ' (' + anime.attributes.titles.ja_jp + ')**'
             } else {
-              embed.title = anime.attributes.canonicalTitle
+              title = ':white_flower: **' + anime.attributes.canonicalTitle + '**'
             }
 
             //Synopsis
             if (anime.attributes.synopsis) {
-              embed.description = anime.attributes.synopsis.split(' ', 64).join(' ') + ' [Show More...](' + anime.links.self + ')'
+              messageArray.push('***Synopsis***\n' + anime.attributes.synopsis.split(' ', 64).join(' ') + ' [Show More...](' + anime.links.self + ')\n')
             }
 
-            //Average Rating
+            //Rating
             if (anime.attributes.averageRating) {
-              embed.fields.push({'inline': true, 'name': 'Average Rating', 'value': '`' + anime.attributes.averageRating + '`'})
-            }
-
-            //Rating Rank
-            if (anime.attributes.ratingRank) {
-              embed.fields.push({'inline': true, 'name': 'Rating Rank', 'value': '`' + anime.attributes.ratingRank + '`'})
+              messageArray.push('► Rating **' + anime.attributes.averageRating + '** *(#' + anime.attributes.ratingRank + ')*')
             }
 
             //Popularity Rank
             if (anime.attributes.popularityRank) {
-              embed.fields.push({'inline': true, 'name': 'Popularity Rank', 'value': '`' + anime.attributes.popularityRank + '`'})
+              messageArray.push('► **#' + anime.attributes.popularityRank + '** most popular Anime!')
             }
 
             //Age Rating
             if (anime.attributes.ageRating) {
               if (anime.attributes.ageRatingGuide) {
-                embed.fields.push({'inline': true, 'name': 'Age Rating', 'value': '`' + anime.attributes.ageRatingGuide + '`'})
+                messageArray.push('► ' + anime.attributes.ageRatingGuide + '')
+                //embed.fields.push({'inline': true, 'name': 'Age Rating', 'value': '`' + anime.attributes.ageRatingGuide + '`'})
               } else {
-                embed.fields.push({'inline': true, 'name': 'Age Rating', 'value': '`' + anime.attributes.ageRating + '`'})
+                messageArray.push('► Age Rating: **' + anime.attributes.ageRating + '**')
+                //embed.fields.push({'inline': true, 'name': 'Age Rating', 'value': '`' + anime.attributes.ageRating + '`'})
               }
             }
 
             //Show Type
             if (anime.attributes.showType) {
-              embed.fields.push({'inline': true, 'name': 'Show Type', 'value': '`' + anime.attributes.showType + '`'})
+              messageArray.push('► Show Type: **' + anime.attributes.showType + '**')
+              //embed.fields.push({'inline': true, 'name': 'Show Type', 'value': '`' + anime.attributes.showType + '`'})
             }
 
             //Airing
             if (anime.attributes.startDate) {
               if (anime.attributes.endDate) {
-                embed.fields.push({'inline': true, 'name': 'Airing Dates', 'value': '`' + anime.attributes.startDate + ' / ' + anime.attributes.endDate + '`'})
+                messageArray.push('► Airing Dates: **' + anime.attributes.startDate + '/' + anime.attributes.endDate + '**')
+                //embed.fields.push({'inline': true, 'name': 'Airing Dates', 'value': '`' + anime.attributes.startDate + ' / ' + anime.attributes.endDate + '`'})
               } else {
-                embed.fields.push({'inline': true, 'name': 'Airing Dates', 'value': '`' + anime.attributes.startDate + '`'})
+                messageArray.push('► Started Airing: **' + anime.attributes.startDate + '**')
+                //embed.fields.push({'inline': true, 'name': 'Airing Dates', 'value': '`' + anime.attributes.startDate + '`'})
               }
+            } else {
+              messageArray.push('► Not started Airing')
             }
 
             //Episode Count/Length
             if (anime.attributes.episodeCount) {
               if (anime.attributes.episodeLength) {
-                embed.fields.push({'inline': false, 'name': 'Episode Count/Length', 'value': '`' + anime.attributes.episodeCount + ' episode(s) at ' + anime.attributes.episodeLength + ' minutes.`'})
+                messageArray.push('► **' + anime.attributes.episodeCount + '** Episodes(s) at **' + anime.attributes.episodeLength + '** Minutes')
+                //embed.fields.push({'inline': false, 'name': 'Episode Count/Length', 'value': '`' + anime.attributes.episodeCount + ' episode(s) at ' + anime.attributes.episodeLength + ' minutes.`'})
               } else {
-                embed.fields.push({'inline': false, 'name': 'Episode Count', 'value': '`' + anime.attributes.episodeCount + ' episode(s)`'})
+                messageArray.push('► **' + anime.attributes.episodeCount + '** Episodes(s)')
+                //embed.fields.push({'inline': false, 'name': 'Episode Count', 'value': '`' + anime.attributes.episodeCount + ' episode(s)`'})
+              }
+            }
+
+            //Create embed
+            embed = {
+              'description': messageArray.join('\n'),
+              'color': handlers.misc.embedColor(msg),
+              'timestamp': new Date(),
+              'footer': {
+                'text': '© Clean.'
               }
             }
 
             //Send final embed
-            Msg.edit('', {embed})
+            Msg.edit(title, {embed})
           } else {
             Msg.edit('Could not find any anime series according to your query...')
           }
