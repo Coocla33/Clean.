@@ -3,7 +3,7 @@ exports.data = {
   'desc': 'Search your favorite anime series through the Kitsu.io api!',
   'usage': 'anime (query)',
   'dm': true,
-  'indev': true
+  'new': true
 }
 
 const kitsu = require('node-kitsu')
@@ -52,27 +52,22 @@ exports.run = function(msg, data) {
             if (anime.attributes.ageRating) {
               if (anime.attributes.ageRatingGuide) {
                 messageArray.push('► ' + anime.attributes.ageRatingGuide + '')
-                //embed.fields.push({'inline': true, 'name': 'Age Rating', 'value': '`' + anime.attributes.ageRatingGuide + '`'})
               } else {
                 messageArray.push('► Age Rating: **' + anime.attributes.ageRating + '**')
-                //embed.fields.push({'inline': true, 'name': 'Age Rating', 'value': '`' + anime.attributes.ageRating + '`'})
               }
             }
 
             //Show Type
             if (anime.attributes.showType) {
               messageArray.push('► Show Type: **' + anime.attributes.showType + '**')
-              //embed.fields.push({'inline': true, 'name': 'Show Type', 'value': '`' + anime.attributes.showType + '`'})
             }
 
             //Airing
             if (anime.attributes.startDate) {
               if (anime.attributes.endDate) {
                 messageArray.push('► Airing Dates: **' + anime.attributes.startDate + '/' + anime.attributes.endDate + '**')
-                //embed.fields.push({'inline': true, 'name': 'Airing Dates', 'value': '`' + anime.attributes.startDate + ' / ' + anime.attributes.endDate + '`'})
               } else {
                 messageArray.push('► Started Airing: **' + anime.attributes.startDate + '**')
-                //embed.fields.push({'inline': true, 'name': 'Airing Dates', 'value': '`' + anime.attributes.startDate + '`'})
               }
             } else {
               messageArray.push('► Not started Airing')
@@ -82,10 +77,8 @@ exports.run = function(msg, data) {
             if (anime.attributes.episodeCount) {
               if (anime.attributes.episodeLength) {
                 messageArray.push('► **' + anime.attributes.episodeCount + '** Episodes(s) at **' + anime.attributes.episodeLength + '** Minutes')
-                //embed.fields.push({'inline': false, 'name': 'Episode Count/Length', 'value': '`' + anime.attributes.episodeCount + ' episode(s) at ' + anime.attributes.episodeLength + ' minutes.`'})
               } else {
                 messageArray.push('► **' + anime.attributes.episodeCount + '** Episodes(s)')
-                //embed.fields.push({'inline': false, 'name': 'Episode Count', 'value': '`' + anime.attributes.episodeCount + ' episode(s)`'})
               }
             }
 
