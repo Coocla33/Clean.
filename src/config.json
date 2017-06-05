@@ -1,6 +1,8 @@
 {
   "token": "",
   "master": [""],
+  "mode": "",
+  "devServers": [],
   "prefix": "",
   "web": {
     "port": 8080
