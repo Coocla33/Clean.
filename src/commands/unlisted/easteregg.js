@@ -1,10 +1,8 @@
 exports.data = {
   'name': 'EasterEgg',
-  'aliases': [],
   'desc': 'Hue.',
   'usage': 'Damn fine easteregg',
-  'dm': true,
-  'permissions': []
+  'dm': false
 }
 
 exports.run = function(msg, data) {

@@ -1,5 +1,6 @@
 const fs = require('fs')
 const path = require('path')
+const webServer = require('../web/server.js')
 
 var stats = {'usage': 0}
 
@@ -15,14 +16,18 @@ exports.load = function() {
             if (!commands.all[directoryObject]) {
               commands.all[directoryObject] = {}
             }
-            let command = require(__dirname + '/../commands/' + directoryObject + '/' + commandFile)
-            commands.all[directoryObject][commandFile.slice(0, -3).toLowerCase()] = command
-            commands.list[commandFile.slice(0, -3).toLowerCase()] = {'name': commandFile.slice(0, -3).toLowerCase(), 'type': directoryObject}
-            commands.array.push(commandFile.slice(0, -3))
-            if (command.data.aliases) {
-              for (let alias of command.data.aliases) {
-                commands.list[alias] = {'name': commandFile.slice(0, -3).toLowerCase(), 'type': directoryObject}
+            try {
+              let command = require(__dirname + '/../commands/' + directoryObject + '/' + commandFile)
+              commands.all[directoryObject][commandFile.slice(0, -3).toLowerCase()] = command
+              commands.list[commandFile.slice(0, -3).toLowerCase()] = {'name': commandFile.slice(0, -3).toLowerCase(), 'type': directoryObject}
+              commands.array.push(commandFile.slice(0, -3))
+              if (command.data.aliases) {
+                for (let alias of command.data.aliases) {
+                  commands.list[alias] = {'name': commandFile.slice(0, -3).toLowerCase(), 'type': directoryObject}
+                }
               }
+            } catch(err) {
+              console.log(handlers.logger.warn(new Date()) + 'Failed to load ' + commandFile.slice(0, -3).toLowerCase() + ' command. (' + err + ')')
             }
           }
         }
@@ -194,12 +199,10 @@ let checkPerms = function(msg, perms) {
   let userMissing = {'type': 'user', 'array': []}
   let botMissing = {'type': 'bot', 'array': []}
   for (let perm of perms) {
-    if (!msg.channel.permissionsFor(msg.author).hasPermission(perm)) {
-      console.log('user no perm')
+    if (!msg.channel.permissionsFor(msg.author).has(perm)) {
       userMissing.array.push(perm)
     }
-    if (!msg.channel.permissionsFor(bot.user).hasPermission(perm)) {
-      console.log('bot no perm')
+    if (!msg.channel.permissionsFor(bot.user).has(perm)) {
       botMissing.array.push(perm)
     }
   }
@@ -247,6 +250,7 @@ let executeCommand = function(msg, command) {
   return new Promise((resolve, reject) => {
     data.usage = data.usage + 1
     console.log(handlers.logger.info(new Date()) + msg.author.username + '#' + msg.author.discriminator + ' used the following command: [' + msg.content.substr(config.prefix.length) + ']')
+    webServer.updateStats()
     commands.all[commands.list[command].type][commands.list[command].name].run(msg, data).then((response) => {
       resolve({'type': 'default', 'response': response, 'command': command})
     }).catch((err) => {

@@ -4,7 +4,10 @@ exports.data = {
   'desc': 'sample text',
   'usage': 'sample text',
   'dm': true,
-  'permissions': []
+  'new': false,
+  'indev': true,
+  'note': 'This is a template',
+  'permissions': ['SEND_MESSAGES']
 }
 
 exports.run = function(msg, data) {

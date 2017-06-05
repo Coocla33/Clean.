@@ -1,5 +1,8 @@
 {
-  "token": "",
-  "master": [""],
-  "prefix": ""
+  "token": "MzA1ODIxMTI2MDgzMjE1Mzgw.C96xog.Pxz29XuDVPooP5Ch36Hmt-OQhnk",
+  "master": ["154923436831932416"],
+  "prefix": "c.",
+  "web": {
+    "port": 25565
+  }
 }

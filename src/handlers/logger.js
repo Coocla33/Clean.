@@ -8,12 +8,16 @@ exports.info = function(date) {
   return logTime(date) + chalk.bold.yellow('[INFO] ')
 }
 
+exports.warn = function(date) {
+  return logTime(date) + chalk.bold.red('[WARNING] ')
+}
+
 exports.web = function(date) {
   return logTime(date) + chalk.bold.magenta('[WEB] ')
 }
 
 exports.connect = function(date) {
-  return logTime(date) = chalk.bold.green('[CONNECTION] ')
+  return logTime(date) + chalk.bold.green('[CONNECTION] ')
 }
 
 let logTime = function(date) {
