@@ -83,29 +83,7 @@ exports.execute = function(msg) {
           let command = msg.content.substr(config.prefix.length).split(' ')[0].toLowerCase()
           data.suffix = suffix
           if (commands.list[command]) {
-            if (isDm) {
-              if (commands.all[commands.list[command].type][commands.list[command].name].data.dm) {
-                if (commands.list[command].type == 'developer') {
-                  if (config.master.indexOf(msg.author.id) > -1) {
-                    preCommand(msg, command, isDm).then((response) => {
-                      resolve(response)
-                    }).catch((err) => {
-                      resolve({'type': 'error', 'err': err, 'command': command})
-                    })
-                  } else {
-                    resolve({'type': 'default', 'response': 'No Acces', 'command': command})
-                  }
-                } else {
-                  preCommand(msg, command, isDm).then((response) => {
-                    resolve(response)
-                  }).catch((err) => {
-                    resolve({'type': 'error', 'err': err, 'command': command})
-                  })
-                }
-              } else {
-                resolve({'type': 'default', 'response': 'DM Disabled', 'command': command})
-              }
-            } else {
+            if (commands.all[commands.list[command].type][commands.list[command].name].data.dm) {
               if (commands.list[command].type == 'developer') {
                 if (config.master.indexOf(msg.author.id) > -1) {
                   preCommand(msg, command, isDm).then((response) => {
@@ -123,6 +101,8 @@ exports.execute = function(msg) {
                   resolve({'type': 'error', 'err': err, 'command': command})
                 })
               }
+            } else {
+              resolve({'type': 'default', 'response': 'DM Disabled', 'command': command})
             }
           }
         }

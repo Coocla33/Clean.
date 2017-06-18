@@ -1,9 +1,8 @@
 exports.data = {
   'name': 'ServerInfo',
-  'aliases': ['server', 'si'],
+  'aliases': ['server', 'si', 'guild'],
   'desc': 'Showing all the information you need about this server!',
-  'usage': 'serverinfo [full]',
-  'indev': true
+  'usage': 'serverinfo [full]'
 }
 
 exports.run = function(msg, data) {
@@ -22,7 +21,7 @@ exports.run = function(msg, data) {
     server.members.forEach((member) => {
 
       //Sort trough all users and see if they are online
-      if (['online', 'dnd', 'idle'].indexOf(member.presence.status) > -1) {
+      if (['online', 'dnd', 'idle'].indexOf(member.presence.status) > -1 && !member.user.bot) {
         onlineUsers++
       }
 
@@ -36,7 +35,11 @@ exports.run = function(msg, data) {
     messageArray.push('► Id: **' + server.id + '**')
 
     //Users
-    messageArray.push('► Online Users: **' + onlineUsers + '/' + server.members.size + '** *(' + botCount + ' Bots)*')
+    if (botCount > 0) {
+      messageArray.push('► Online Users: **' + onlineUsers + '/' + (server.members.size - botCount) + '** *+' + botCount + ' Bots*')
+    } else {
+      messageArray.push('► Online Users: **' + onlineUsers + '/' + server.members.size + '**')
+    }
 
     //Timeout
     if (server.afkChannelID) {

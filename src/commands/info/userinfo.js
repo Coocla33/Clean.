@@ -3,8 +3,7 @@ exports.data = {
   'aliases': ['user', 'ui'],
   'desc': 'Show all the secret info about an user!',
   'usage': 'userinfo [@mention]',
-  'dm': true,
-  'new': true
+  'dm': true
 }
 
 exports.run = function(msg, data) {

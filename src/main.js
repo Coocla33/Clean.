@@ -45,9 +45,7 @@ bot.login(config.token).then(() => {
 bot.on('ready', () => {
   if (!startup.started) {
     console.log(handlers.logger.info(new Date()) + 'Ready (' + (new Date() - startup.date) + 'ms)')
-    if (config.mode == 'development') {
-      bot.user.setPresence({'game': {'name': 'DEVELOPMENT'}})
-    } else {
+    if (config.mode != 'development') {
       bot.user.setPresence({'game': {'name': 'c.help'}})
     }
     startup.started = true
@@ -95,33 +93,65 @@ bot.on('message', (msg) => {
       msg.channel.send(':bug: **ERROR!** Please report this to the developers!\n```js\n' + err + '```')
     })
   } else if (config.mode == 'development') {
-    if (config.devServers.indexOf(msg.guild.id) > -1) {
-      handlers.command.execute(msg).then((response) => {
-        if (response.type == 'default') {
-          msg.channel.send(':no_entry: **' + response.response + '** `' + config.prefix + 'help ' + response.command + '`').then((Msg) => {
-            let deleteMsg = function() {
-              Msg.delete()
+    let isDm = msg.channel.type == 'dm'
+    if (isDm) {
+      if (config.master.indexOf(msg.author.id) > -1) {
+        handlers.command.execute(msg).then((response) => {
+          if (response.type == 'default') {
+            msg.channel.send(':no_entry: **' + response.response + '** `' + config.prefix + 'help ' + response.command + '`').then((Msg) => {
+              let deleteMsg = function() {
+                Msg.delete()
+              }
+              setTimeout(deleteMsg, 10000)
+            })
+          } else if (response.type == 'error') {
+            for (let id of config.master) {
+              bot.fetchUser(id).then((user) => {
+                console.error(handlers.logger.error(new Date(), response.command.toUpperCase()), response.err.stack)
+                user.send('**ERROR! (' + response.command.toUpperCase() + ')** ```js\n' + response.err.stack + '```')
+              })
             }
-            setTimeout(deleteMsg, 10000)
-          })
-        } else if (response.type == 'error') {
-          for (let id of config.master) {
-            bot.fetchUser(id).then((user) => {
-              console.error(handlers.logger.error(new Date(), response.command.toUpperCase()), response.err.stack)
-              user.send('**ERROR! (' + response.command.toUpperCase() + ')** ```js\n' + response.err.stack + '```')
+            msg.channel.send('An unexpected error has accured! This has been automaticly reported to the developers!').then((Msg) => {
+              let deleteMsg = function() {
+                Msg.delete()
+              }
+              setTimeout(deleteMsg, 10000)
             })
           }
-          msg.channel.send('An unexpected error has accured! This has been automaticly reported to the developers!').then((Msg) => {
-            let deleteMsg = function() {
-              Msg.delete()
+        }).catch((err) => {
+          console.error(err)
+          msg.channel.send(':bug: **ERROR!** Please report this to the developers!\n```js\n' + err + '```')
+        })
+      }
+    } else {
+      if (config.devServers.indexOf(msg.guild.id) > -1) {
+        handlers.command.execute(msg).then((response) => {
+          if (response.type == 'default') {
+            msg.channel.send(':no_entry: **' + response.response + '** `' + config.prefix + 'help ' + response.command + '`').then((Msg) => {
+              let deleteMsg = function() {
+                Msg.delete()
+              }
+              setTimeout(deleteMsg, 10000)
+            })
+          } else if (response.type == 'error') {
+            for (let id of config.master) {
+              bot.fetchUser(id).then((user) => {
+                console.error(handlers.logger.error(new Date(), response.command.toUpperCase()), response.err.stack)
+                user.send('**ERROR! (' + response.command.toUpperCase() + ')** ```js\n' + response.err.stack + '```')
+              })
             }
-            setTimeout(deleteMsg, 10000)
-          })
-        }
-      }).catch((err) => {
-        console.error(err)
-        msg.channel.send(':bug: **ERROR!** Please report this to the developers!\n```js\n' + err + '```')
-      })
+            msg.channel.send('An unexpected error has accured! This has been automaticly reported to the developers!').then((Msg) => {
+              let deleteMsg = function() {
+                Msg.delete()
+              }
+              setTimeout(deleteMsg, 10000)
+            })
+          }
+        }).catch((err) => {
+          console.error(err)
+          msg.channel.send(':bug: **ERROR!** Please report this to the developers!\n```js\n' + err + '```')
+        })
+      }
     }
   }
 })

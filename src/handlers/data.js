@@ -1,7 +1,7 @@
 const nedb = require('nedb')
 const path = require('path')
 
-let guildDB = new nedb({filename: path.join(__dirname, '..', 'data', 'guilds'), autoload: true})
+let guildDB = new nedb({filename: path.join(__dirname, '..', 'data', 'guilds'), autoload: true, corruptAlertThreshold: 1})
 
 exports.guild = {
   new: function(guild) {
