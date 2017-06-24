@@ -10,7 +10,8 @@ const chartjs = require('chartjs-node')
 exports.run = function(msg, data) {
   return new Promise((resolve, reject) => {
     msg.channel.send('Generating Image, this might take a while...').then((Msg) => {
-      //Data Objects
+
+      //Setup variables
       let graphObject = {}
       let graphData = {
         'labels': [],
@@ -27,17 +28,21 @@ exports.run = function(msg, data) {
       for (let member of msg.guild.members.array()) {
         if (!member.user.bot) {
           if (graphObject['Normal Users']) {
+
             //Add 1 to total 'Noraml Users' count.
             graphObject['Normal Users'].count++
           } else {
+
             //Create new object inside graphObject for 'Normal Users'
             graphObject['Normal Users'] = {'count': 1, 'color': 'rgb(52, 219, 73)'}
           }
         } else {
           if (graphObject['Bots']) {
+
             //Add 1 to total 'Bots' count.
             graphObject['Bots'].count++
           } else {
+
             //Create new object inside graphObject for 'Bots'
             graphObject['Bots'] = {'count': 1, 'color': 'rgb(219, 52, 52)'}
           }
@@ -66,6 +71,7 @@ exports.run = function(msg, data) {
       }).then((streamResult) => {
         return chart.writeImageToFile('image/png', './src/cache/userratio.png')
       }).then(() => {
+
         //Delete old message and send new message containing the graph.
         Msg.delete()
         msg.channel.send({file: './src/cache/userratio.png'}).catch((err) => {reject(err)})
