@@ -4,8 +4,7 @@ exports.data = {
   'desc': 'Reload any command you want!',
   'usage': 'reloadcommand (command)',
   'dm': true,
-  'unlisted': true,
-  'permissions': []
+  'unlisted': true
 }
 
 exports.run = function(msg, data) {

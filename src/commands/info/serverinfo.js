@@ -86,12 +86,12 @@ exports.run = function(msg, data) {
 
       //Roles
       if (roles.length > 0) {
-        messageArray.push('\n***Roles***\n`' + roles.join('`, `') + '`')
+        messageArray.push('\n**__Roles__**\n`' + roles.join('`, `') + '`')
       }
 
       //Channels
       if (channels.length > 0) {
-        messageArray.push('\n***Text Channels***\nDefault Text Channel: **#' + server.defaultChannel.name + '**\n`' + channels.join('`, `') + '`')
+        messageArray.push('\n**__Text Channels__**\nDefault Text Channel: **#' + server.defaultChannel.name + '**\n`' + channels.join('`, `') + '`')
       }
 
       //Emojis
@@ -99,9 +99,9 @@ exports.run = function(msg, data) {
 
         //Check if emoji starts with the discord emoji pattern thingy
         if (emojis[0].startsWith('<:')) {
-          messageArray.push('\n***Emojis***\n' + emojis.join(' '))
+          messageArray.push('\n**__Emojis__**\n' + emojis.join(' '))
         } else {
-          messageArray.push('\n***Emojis***\n`' + emojis.join('`, `') + '`')
+          messageArray.push('\n**__Emojis__**\n`' + emojis.join('`, `') + '`')
         }
       }
     }

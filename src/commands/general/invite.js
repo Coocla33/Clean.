@@ -17,9 +17,10 @@ exports.run = function(msg, data) {
         'text': '© Clean.'
       },
       'description':
-      '► [Bot Invite](http://clean.coocla33.com/invite)\n' +
-      '► [Support Server](http://clean.coocla33.com/support)\n' +
-      '► [Patreon](https://www.patreon.com/Coocla33)'
+      '► [Bot Invite](https://discordapp.com/oauth2/authorize?client_id=305821126083215380&scope=bot)\n' +
+      '► [Support Server](https://discordapp.com/invite/XUjxMEv)\n' +
+      '► [Patreon](https://www.patreon.com/Coocla33)\n' +
+      '► [GitHub](https://github.com/Coocla33/Clean.)'
     }
 
     //Send embed

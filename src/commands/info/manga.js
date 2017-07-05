@@ -35,7 +35,7 @@ exports.run = function(msg, data) {
 
             //Synopsis
             if (manga.attributes.synopsis) {
-              messageArray.push('***Synopsis***\n' + manga.attributes.synopsis.split(' ', 64).join(' ') + ' [Show More](' + manga.links.self + ')\n')
+              messageArray.push('**__Synopsis__**\n' + manga.attributes.synopsis.split(' ', 64).join(' ') + ' [Show More](' + manga.links.self + ')\n')
             }
 
             //Rating

@@ -15,7 +15,7 @@ let startup = {'date': new Date(), 'started': false}
 //global config
 global.config = config
 global.bot = bot
-global.data = {suffix: '', usage: 0}
+global.data = {}
 global.webServer = webServer
 global.srcDirectory = __dirname
 
@@ -68,7 +68,7 @@ bot.on('message', (msg) => {
   if (config.mode == 'normal') {
     handlers.command.execute(msg).then((response) => {
       if (response.type == 'default') {
-        msg.channel.send(':no_entry: **' + response.response + '** `' + config.prefix + 'help ' + response.command + '`').then((Msg) => {
+        msg.channel.send(':no_entry: **' + response.response + '** `' + config.prefix + 'help ' + response.command.data.name + '`').then((Msg) => {
           let deleteMsg = function() {
             Msg.delete()
           }
@@ -98,7 +98,7 @@ bot.on('message', (msg) => {
       if (config.master.indexOf(msg.author.id) > -1) {
         handlers.command.execute(msg).then((response) => {
           if (response.type == 'default') {
-            msg.channel.send(':no_entry: **' + response.response + '** `' + config.prefix + 'help ' + response.command + '`').then((Msg) => {
+            msg.channel.send(':no_entry: **' + response.response + '** `' + config.prefix + 'help ' + response.command.data.name + '`').then((Msg) => {
               let deleteMsg = function() {
                 Msg.delete()
               }
@@ -127,7 +127,7 @@ bot.on('message', (msg) => {
       if (config.devServers.indexOf(msg.guild.id) > -1) {
         handlers.command.execute(msg).then((response) => {
           if (response.type == 'default') {
-            msg.channel.send(':no_entry: **' + response.response + '** `' + config.prefix + 'help ' + response.command + '`').then((Msg) => {
+            msg.channel.send(':no_entry: **' + response.response + '** `' + config.prefix + 'help ' + response.command.data.name + '`').then((Msg) => {
               let deleteMsg = function() {
                 Msg.delete()
               }
@@ -137,7 +137,7 @@ bot.on('message', (msg) => {
             for (let id of config.master) {
               bot.fetchUser(id).then((user) => {
                 console.error(handlers.logger.error(new Date(), response.command.toUpperCase()), response.err.stack)
-                user.send('**ERROR! (' + response.command.toUpperCase() + ')** ```js\n' + response.err.stack + '```')
+                user.send('**ERROR! (' + response.command.data.name.toUpperCase() + ')** ```js\n' + response.err.stack + '```')
               })
             }
             msg.channel.send('An unexpected error has accured! This has been automaticly reported to the developers!').then((Msg) => {
@@ -149,7 +149,7 @@ bot.on('message', (msg) => {
           }
         }).catch((err) => {
           console.error(err)
-          msg.channel.send(':bug: **ERROR!** Please report this to the developers!\n```js\n' + err + '```')
+          msg.channel.send(':bug: **ERROR!** Please report this to the developers!\n```js\n' + err.stack + '```')
         })
       }
     }

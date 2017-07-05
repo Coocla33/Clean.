@@ -34,7 +34,7 @@ exports.run = function(msg, data) {
 
             //Synopsis
             if (anime.attributes.synopsis) {
-              messageArray.push('***Synopsis***\n' + anime.attributes.synopsis.split(' ', 64).join(' ') + ' [Show More...](' + anime.links.self + ')\n')
+              messageArray.push('**__Synopsis__**\n' + anime.attributes.synopsis.split(' ', 64).join(' ') + ' [Show More...](' + anime.links.self + ')\n')
             }
 
             //Rating
