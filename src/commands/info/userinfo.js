@@ -3,8 +3,7 @@ exports.data = {
   'aliases': ['user', 'ui'],
   'desc': 'Show all the secret info about an user!',
   'usage': 'userinfo [@mention]',
-  'dm': true,
-  'new': true
+  'dm': true
 }
 
 exports.run = function(msg, data) {
@@ -70,7 +69,7 @@ exports.run = function(msg, data) {
 
     //Roles
     if (roles.length > 0) {
-      messageArray.push('\n***Roles***\n`' + roles.join('`, `') + '`')
+      messageArray.push('\n**__Roles__**\n`' + roles.join('`, `') + '`')
     }
 
     //Create Embed

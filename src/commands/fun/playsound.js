@@ -3,8 +3,7 @@ exports.data = {
   'aliases': ['ps'],
   'desc': 'Play a sound inside your voice channel!',
   'usage': 'playsound [sound]',
-  'note': 'You need to be inside a Voice Channel to use this command!\n**Sound list:** `Airhorn`, `MonsterKill`, `Troll`, `Applause`, `Nigger`, `Scream`, `TheFuckYouDo`, `MegaFaggot`',
-  'new': true
+  'note': 'You need to be inside a Voice Channel to use this command!\n**Sound list:** `Airhorn`, `MonsterKill`, `Troll`, `Applause`, `Nigger`, `Scream`, `TheFuckYouDo`, `MegaFaggot`'
 }
 
 exports.run = function(msg, data) {

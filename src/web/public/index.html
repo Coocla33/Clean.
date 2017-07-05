@@ -49,13 +49,16 @@
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">External Links <span class="caret"></span></a>
               <ul class="dropdown-menu">
                 <li>
-                  <a href="https://discord.gg/XUjxMEv" target="_blank"><span class="fa fa-user"></span> Support Server</a>
+                  <a href="https://discordapp.com/invite/XUjxMEv" target="_blank"><span class="fa fa-user"></span> Support Server</a>
                 </li>
                 <li>
                   <a href="https://discordapp.com/oauth2/authorize?client_id=305821126083215380&scope=bot" target="_blank"><span class="fa fa-plus"></span> Bot Invite</a>
                 </li>
                 <li>
                   <a href="https://github.com/Coocla33/Clean." target="_blank"><span class="fa fa-github"></span> Github</a>
+                </li>
+                <li>
+                  <a href="https://www.patreon.com/Coocla33" target="_blank"><span class="fa fa-money"></span> Patreon</a>
                 </li>
               </ul>
             </li>
@@ -140,8 +143,8 @@
             <h1 class="text-center">Commands</h1>
             <hr style="margin: 8px; width: 96%; margin-left: auto; margin-right: auto;">
             <h4 class="text-center">These are all the Commands of <b>Clean.</b></h4>
-            <div class="col s12 center inline" id="commandContainer">
-
+            <div class="row center inline" id="commandContainer">
+              <div class="grid-sizer col-md-3"></div>
             </div>
           </div>
         </div>
@@ -162,10 +165,8 @@
       $(function() {
         let socket = io.connect()
         let commandContainer = $('#commandContainer')
-
         socket.emit('getStats')
         socket.emit('getCommands')
-
         socket.on('setStats', (stats) => {
           let options = {
             'useEasing': true,
@@ -175,30 +176,24 @@
             'prefix': '',
             'suffix': ''
           }
-
           console.log(stats)
           let userCountUp = new CountUp('user-count', 0, stats.userCount, 0, 5)
           let guildCountUp = new CountUp('guild-count', 0, stats.guildCount, 0, 5)
           let channelCountUp = new CountUp('channel-count', 0, stats.channelCount, 0, 5)
           let commandCountUp = new CountUp('command-usage', 0, stats.commandCount, 0, 5)
-
           let userCount = $('user-count')
           console.log(userCount)
-
           userCountUp.start()
           guildCountUp.start()
           channelCountUp.start()
           commandCountUp.start()
         })
-
         socket.on('updateStats', (stats) => {
           let userCount = $('#user-count')
           let guildCount = $('#guild-count')
           let channelCount = $('#channel-count')
           let commandUsage = $('#command-usage')
-
           console.log(userCount.text())
-
           let userCountUp = new CountUp('user-count', Number(userCount.text()), stats.userCount, 0, 5)
           let guildCountUp = new CountUp('guild-count', Number(guildCount.text()), stats.guildCount, 0, 5)
           let channelCountUp = new CountUp('channel-count', Number(channelCount.text()), stats.channelCount, 0, 5)
@@ -208,7 +203,6 @@
           channelCountUp.start()
           commandCountUp.start()
         })
-
         socket.on('updateCommands', (data) => {
           let cache = []
           for (let type in data) {
@@ -266,7 +260,6 @@
           }
           commandContainer.html(final.join(''))
         })
-
         $('#navbar a').on('click', function(event) {
           if (this.hash !== '') {
             event.preventDefault()
@@ -279,15 +272,12 @@
           }
         });
       })
-
       $('.dropdown').on('show.bs.dropdown', function() {
         $(this).find('.dropdown-menu').first().stop(true, true).slideDown();
       });
-
       $('.dropdown').on('hide.bs.dropdown', function() {
         $(this).find('.dropdown-menu').first().stop(true, true).slideUp();
       });
-
     </script>
   </body>
 </html>

@@ -2,8 +2,7 @@ exports.data = {
   'name': 'Anime',
   'desc': 'Search your favorite anime series through the Kitsu.io api!',
   'usage': 'anime (query)',
-  'dm': true,
-  'new': true
+  'dm': true
 }
 
 const kitsu = require('node-kitsu')
@@ -35,7 +34,7 @@ exports.run = function(msg, data) {
 
             //Synopsis
             if (anime.attributes.synopsis) {
-              messageArray.push('***Synopsis***\n' + anime.attributes.synopsis.split(' ', 64).join(' ') + ' [Show More...](' + anime.links.self + ')\n')
+              messageArray.push('**__Synopsis__**\n' + anime.attributes.synopsis.split(' ', 64).join(' ') + ' [Show More...](' + anime.links.self + ')\n')
             }
 
             //Rating
@@ -51,7 +50,8 @@ exports.run = function(msg, data) {
             //Age Rating
             if (anime.attributes.ageRating) {
               if (anime.attributes.ageRatingGuide) {
-                messageArray.push('► ' + anime.attributes.ageRatingGuide + '')
+                messageArray.push('► Age Rating: **' + anime.attributes.ageRating + '**')
+                messageArray.push('► Age Guide: **' + anime.attributes.ageRatingGuide + '**')
               } else {
                 messageArray.push('► Age Rating: **' + anime.attributes.ageRating + '**')
               }
@@ -83,7 +83,7 @@ exports.run = function(msg, data) {
             }
 
             //Create embed
-            embed = {
+            let embed = {
               'description': messageArray.join('\n'),
               'color': handlers.misc.embedColor(msg),
               'timestamp': new Date(),

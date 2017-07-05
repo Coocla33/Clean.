@@ -1,69 +1,69 @@
-//Load NODE MODULES
+
+//Setup node modules
 const fs = require('fs')
 const path = require('path')
 const webServer = require('../web/server.js')
 
-//Setup main Variables
-var stats = {'usage': 0}
+//Setup basic variables
+let stats = {'usage': 0}
 
-//Load export
+//Export load function
 exports.load = function() {
   return new Promise((resolve, reject) => {
     try {
-    
+
       //Setup variables
-      var commands = {'all': {}, 'list': {}, 'array': []}
+      let commands = {'all': {}, 'list': {}, 'array': []}
       let directories = fs.readdirSync(__dirname + '/../commands/')
-      
-      //For every Directory Object of directories
+
+      //For every directory object of directories
       for (let directoryObject of directories) {
-      
-        //Setup variables
+
+        //Setup commandFiles array for every directoryObject
         let commandFiles = fs.readdirSync(__dirname + '/../commands/' + directoryObject)
-        
-        /For every commandFile of commandFiles
+
+        //For every commandfile
         for (let commandFile of commandFiles) {
-        
-          //If commandFile is a .js file
+
+          //Check if commandFile is a javascript file
           if (commandFile.endsWith('.js')) {
-          
-            //If this directory is not yet created/used
+
+            //Setup commands.all variable
             if (!commands.all[directoryObject]) {
               commands.all[directoryObject] = {}
             }
-            
-            //Try, so when a command failes to load you can warn the user.
+
             try {
-            
-              //Setup variables
+
+              //Require command
               let command = require(__dirname + '/../commands/' + directoryObject + '/' + commandFile)
-              
-              //Add command Data inside the commands variables
+
+              //Setup command inside the commands variable
               commands.all[directoryObject][commandFile.slice(0, -3).toLowerCase()] = command
               commands.list[commandFile.slice(0, -3).toLowerCase()] = {'name': commandFile.slice(0, -3).toLowerCase(), 'type': directoryObject}
-              commands.array.push(commandFile.slice(0, -3))
-              
-              //If the command has aliases
+              commands.array.push(commandFile.slice(0, -3).toLowerCase())
+
+              //Setup aliases if any
               if (command.data.aliases) {
-              
-                //Setup aliases with a for loop
+
+                //For every alias
                 for (let alias of command.data.aliases) {
                   commands.list[alias] = {'name': commandFile.slice(0, -3).toLowerCase(), 'type': directoryObject}
                 }
               }
-              
-            //Error handeling
+
+            //Error Handleing
             } catch(err) {
-              console.log(handlers.logger.warn(new Date()) + 'Failed to load ' + commandFile.slice(0, -3).toLowerCase() + ' command. (' + err + ')')
+              reject(err)
             }
           }
         }
       }
-       
-      //Set global commands
+
+      //Make commands a global variable
       global.commands = commands
       resolve(commands)
-      
+
     //Error Handleing
     } catch(err) {
       reject(err)
@@ -71,202 +71,151 @@ exports.load = function() {
   })
 }
 
-//Reload export
+//export reload function
 exports.reload = function(command) {
   return new Promise((resolve, reject) => {
-  
-    //Force lowercase
+
+    //Lowercase command
     command = command.toLowerCase()
-    
-    //Check if the command exists
+
+    //Check if command exists
     if (commands.list[command]) {
-    
-      //Try for error handeling if there is an error inside the command itself
       try {
-      
-        //Get the old command
+
+        //Get old command
         let oldCommand = {'all': commands.all[commands.list[command].type][commands.list[command].name], 'list': commands.list[command]}
-        
-        //delete cache of old command
+
+        //Delete cache of require function
         delete require.cache[path.join(__dirname, '..', 'commands', oldCommand.list.type, oldCommand.list.name + '.js')]
-        
-        //Require new command file
+
+        //Require new command
         let newCommand = require(__dirname + '/../commands/' + oldCommand.list.type + '/' + oldCommand.list.name + '.js')
-        
-        //Delete old command
+
+        //Delete old command data
         delete commands.list[command]
         delete commands.all[oldCommand.list.type][oldCommand.list.name]
         delete commands.array[command]
-        
-        //Check if oldCommand had aliases
+
+        //Check of old aliases and delete them
         if (oldCommand.all.data.aliases) {
-        
-          //Using a for loop remove old aliases from the global commands variable
           for (let alias of oldCommand.all.data.aliases) {
             delete commands.list[alias]
           }
         }
-        
-        //Set new command
+
+        //Setup new command
         commands.all[oldCommand.list.type][oldCommand.list.name] = newCommand
         commands.list[oldCommand.list.name] = {'name': oldCommand.list.name, 'type': oldCommand.list.type}
-        
-        //Check if new command has aliases
         if (newCommand.data.aliases) {
-        
-          //With a for loop add the new aliases to the global commands variable
           for (let alias of newCommand.data.aliases) {
             commands.list[alias] = {'name': oldCommand.list.name, 'type': oldCommand.list.type}
           }
         }
-        
-      //Error handeling
       } catch(err) {
         reject(err)
       }
     } else {
-      
-      //Say the command does not exist to the user
       reject('Command Does Not Exist')
     }
-    
-    //Error handeling
     resolve('Reloaded')
   })
 }
 
-//Execute export
+//export execute function
 exports.execute = function(msg) {
   return new Promise((resolve, reject) => {
     try {
-      
-      //Check dm
+
+      //Setup check variables
       let isDm = msg.channel.type == 'dm'
+      let isMaster = config.master.indexOf(msg.author.id)
+
+
+      //Check if msg is a dm message
       if (isDm) {
-      
-        //Check if the message starts with config.prefix because dm
+
+        //Check if message starts with prefix
         if (msg.content.startsWith(config.prefix)) {
-        
-          //Setup variables
-          let suffix = msg.content.substr(config.prefix.length).substr(msg.content.substr(config.prefix.length).split(' ')[0].length + 1)
-          let command = msg.content.substr(config.prefix.length).split(' ')[0].toLowerCase()
-          data.suffix = suffix
-          
-          //Check if the command exists
-          if (commands.list[command]) {
-          
-            //Again check if the message is in DM? (Should be removed)
-            if (isDm) {
-            
-              //Check if the command is enabled in DM
-              if (commands.all[commands.list[command].type][commands.list[command].name].data.dm) {
-              
-                //Check if the command is a developer command
-                if (commands.list[command].type == 'developer') {
-                
-                  //Check if the user is inside the master user Array of the config.json file
-                  if (config.master.indexOf(msg.author.id) > -1) {
-                    
-                    //Run command
-                    preCommand(msg, command, isDm).then((response) => {
-                      resolve(response)
-                    }).catch((err) => {
-                      resolve({'type': 'error', 'err': err, 'command': command})
-                    })
-                    
-                  //Error Handleing
-                  } else {
-                    resolve({'type': 'default', 'response': 'No Acces', 'command': command})
-                  }
-                } else {
-                
-                  //Run command
-                  preCommand(msg, command, isDm).then((response) => {
-                    resolve(response)
-                  }).catch((err) => {
-                    resolve({'type': 'error', 'err': err, 'command': command})
-                  })
-                }
-                
-              //Error handleing
-              } else {
-                resolve({'type': 'default', 'response': 'DM Disabled', 'command': command})
-              }
-            
-            //THIS SHOULD ALL BE DELETED WUDUFU
-            } else {
-              if (commands.list[command].type == 'developer') {
-                if (config.master.indexOf(msg.author.id) > -1) {
-                  preCommand(msg, command, isDm).then((response) => {
-                    resolve(response)
-                  }).catch((err) => {
-                    resolve({'type': 'error', 'err': err, 'command': command})
-                  })
-                } else {
-                  resolve({'type': 'default', 'response': 'No Acces', 'command': command})
-                }
-              } else {
-                preCommand(msg, command, isDm).then((response) => {
+
+          //Setup basic variables
+          let commandName = msg.content.substr(config.prefix.length).split(' ')[0].toLowerCase()
+
+          //Check if command is valid
+          if (commands.list[commandName]) {
+
+            //Setup command variable
+            let command = commands.all[commands.list[commandName].type][commands.list[commandName].name]
+
+            //Check if command is a developer only command
+            if (commands.list[commandName].type == 'developer') {
+
+              //Check if user is a master user using the isMaster variable
+              if (isMaster > -1) {
+
+                //Execute preCommand
+                preCommand(msg, command, undefined).then((response) => {
                   resolve(response)
                 }).catch((err) => {
-                  resolve({'type': 'error', 'err': err, 'command': command})
+                  reject(err)
                 })
+              } else {
+
+                //No acces to command
+                resolve({'type': 'default', 'response': 'No Acces', 'command': command})
               }
+            } else {
+
+              //Execute preCommand
+              preCommand(msg, command, undefined).then((response) => {
+                resolve(response)
+              }).catch((err) => {
+                reject(err)
+              })
             }
           }
         }
       } else {
-        
+
         //Get guild object
         handlers.data.guild.get(msg.guild).then((guild) => {
-        
-          //Check if msg starts with the guild prefix.
+
+          //Check if message starts with prefix
           if (msg.content.startsWith(guild.settings.prefix)) {
-            let suffix = msg.content.substr(guild.settings.prefix.length).substr(msg.content.substr(guild.settings.prefix.length).split(' ')[0].length + 1)
-            let command = msg.content.substr(guild.settings.prefix.length).split(' ')[0].toLowerCase()
-            data.suffix = suffix
-            data.guild = guild
-            if (commands.list[command]) {
-              if (isDm) {
-                if (commands.all[commands.list[command].type][commands.list[command].name].data.dm) {
-                  if (commands.list[command].type == 'developer') {
-                    if (config.master.indexOf(msg.author.id) > -1) {
-                      preCommand(msg, command, isDm).then((response) => {
-                        resolve(response)
-                      }).catch((err) => {
-                        resolve({'type': 'error', 'err': err, 'command': command})
-                      })
-                    } else {
-                      resolve({'type': 'default', 'response': 'No Acces', 'command': command})
-                    }
-                  } else {
-                    preCommand(msg, command, isDm).then((response) => {
-                      resolve(response)
-                    }).catch((err) => {
-                      resolve({'type': 'error', 'err': err, 'command': command})
-                    })
-                  }
-                } else {
-                  resolve({'type': 'default', 'response': 'DM Disabled', 'command': command})
-                }
-              } else {
-                if (commands.list[command].type == 'developer') {
-                  if (config.master.indexOf(msg.author.id) > -1) {
-                    preCommand(msg, command, isDm).then((response) => {
-                      resolve(response)
-                    }).catch((err) => {
-                      resolve({'type': 'error', 'err': err, 'command': command})
-                    })
-                  } else {
-                    resolve({'type': 'default', 'response': 'No Acces', 'command': command})
-                  }
-                } else {
-                  preCommand(msg, command, isDm).then((response) => {
+
+            //Setup basic variables
+            let commandName = msg.content.substr(guild.settings.prefix.length).split(' ')[0].toLowerCase()
+
+            //Check if command is valid
+            if (commands.list[commandName]) {
+
+              //Setup command variable
+              let command = commands.all[commands.list[commandName].type][commands.list[commandName].name]
+
+              //Check if command is a developer only command
+              if (commands.list[commandName].type == 'developer') {
+
+                //Check if user is a master user using the isMaster variable
+                if (isMaster > -1) {
+
+                  //Execute preCommand
+                  preCommand(msg, command, guild).then((response) => {
                     resolve(response)
                   }).catch((err) => {
-                    resolve({'type': 'error', 'err': err, 'command': command})
+                    reject(err)
                   })
+                } else {
+
+                  //No acces to command
+                  resolve({'type': 'default', 'response': 'No Acces', 'command': command})
                 }
+              } else {
+
+                //Execute preCommand
+                preCommand(msg, command, guild).then((response) => {
+                  resolve(response)
+                }).catch((err) => {
+                  reject(err)
+                })
               }
             }
           }
@@ -274,80 +223,157 @@ exports.execute = function(msg) {
           if (err == 'Guild Does Not Exist') {
             handlers.data.guild.new(msg.guild).then(() => {
               exports.execute(msg)
-            }).catch((err) => {
-              resolve({'type': 'error', 'err': err, 'command': 'Data Handler'})
             })
-          } else {
-            resolve({'type': 'error', 'err': err, 'command': 'Data Handler'})
           }
         })
       }
+
+    //Error Handleing
     } catch(err) {
-      resolve({'type': 'error', 'err': err, 'command': command})
+      resolve({'type': 'error', 'err': err, 'command': msg.content.substr(config.prefix.length).split(' ')[0].toLowerCase()})
     }
   })
 }
 
-let checkPerms = function(msg, perms) {
-  let userMissing = {'type': 'user', 'array': []}
-  let botMissing = {'type': 'bot', 'array': []}
-  for (let perm of perms) {
-    if (!msg.channel.permissionsFor(msg.author).has(perm)) {
-      userMissing.array.push(perm)
-    }
-    if (!msg.channel.permissionsFor(bot.user).has(perm)) {
-      botMissing.array.push(perm)
-    }
-  }
-  if (userMissing.array.length > 0) {
-    return {'msg': 'User Has No Perms (' + userMissing.array.join(', ') + ')', 'status': false}
-  } else if (botMissing.array.length > 0) {
-    return {'msg': 'Bot Has No Perms (' + botMissing.array.join(', ') + ')', 'status': false}
+//Function to setup the dataobject per command
+function setupData(msg, command, guild, callback) {
+
+  //Setup variables
+  let suffix = ''
+  if (guild) {
+    suffix = msg.content.substr(guild.settings.prefix.length).substr(msg.content.substr(guild.settings.prefix.length).split(' ')[0].length + 1)
   } else {
-    return {'status': true}
+    suffix = msg.content.substr(config.prefix.length).substr(msg.content.substr(config.prefix.length).split(' ')[0].length + 1)
+  }
+  data = {}
+
+  //Check if command needs user object
+  if (command.data.userObjectRequired) {
+
+    //Get user object
+    handlers.data.user.get(msg.author).then((user) => {
+
+      //Setup final data object
+      data.user = user
+      data.suffix = suffix
+      data.guild = guild
+      data.usage = stats.usage
+
+      //callback
+      callback(data)
+    }).catch((err) => {
+
+      //No user object
+      if (err == 'User Does Not Exist') {
+        handlers.data.user.new(msg.author).then((user) => {
+
+          //Setup final data object
+          data.user = user
+          data.suffix = suffix
+          data.guild = guild
+          data.usage = stats.usage
+
+          //callback
+          callback(data)
+        })
+      }
+    })
+  } else {
+
+    //Setup final data object
+    data.suffix = suffix
+    data.guild = guild
+    data.usage = stats.usage
+
+    //callback
+    callback(data)
   }
 }
 
-let preCommand = function(msg, command, isDm) {
-  return new Promise((resolve, reject) => {
-    if (isDm) {
-      executeCommand(msg, command, data).then((response) => {
-        resolve(response)
-      }).catch((err) => {
-        reject(err)
-      })
+function permCheck(msg, perms) {
+
+  //Setup variables
+  let userMissing = {'type': 'user', 'array': []}
+  let botMissing = {'type': 'bot', 'array': []}
+
+  //For every permission of permissions
+  for (let perm of perms) {
+
+    //If user does NOT have perm
+    if (msg.guild && !msg.channel.permissionsFor(msg.author).has(perm)) {
+      userMissing.array.push(perm)
+    }
+
+    //If bot does NOT have perm
+    if (msg.guild && !msg.channel.permissionsFor(bot.user).has(perm)) {
+      botMissing.array.push(perm)
+    }
+
+    //If user is missing more then 0 perms
+    if (userMissing.array.length > 0) {
+      return {'msg': 'User Has No Perms (' + userMissing.array.join(', ') + ')', 'status': false}
+
+    //If bot is missing more then 0 perms
+    } else if (botMissing.array.length > 0) {
+      return {'msg': 'Bot Has No Perms (' + botMissing.array.join(', ') + ')', 'status': false}
     } else {
-      if (commands.all[commands.list[command].type][commands.list[command].name].data.permissions) {
-        let permCheck = checkPerms(msg, commands.all[commands.list[command].type][commands.list[command].name].data.permissions)
-        if (permCheck.status) {
-          executeCommand(msg, command, data).then((response) => {
-            resolve(response)
-          }).catch((err) => {
-            reject(err)
-          })
-        } else {
-          resolve({'type': 'default', 'response': permCheck.msg, 'command': command})
-        }
-      } else {
-        executeCommand(msg, command, data).then((response) => {
+
+      //User and Bot have perms
+      return {'status': true}
+    }
+  }
+}
+
+function preCommand(msg, command, guild) {
+  return new Promise((resolve, reject) => {
+
+    //Check permissions
+    if (command.data.permissions) {
+      let perm = permCheck(msg, command.data.permissions)
+      if (perm.status) {
+
+        //Execute Command
+        executeCommand(msg, command, guild).then((response) => {
           resolve(response)
         }).catch((err) => {
           reject(err)
         })
+      } else {
+        resolve({'type': 'default', 'response': perm.msg, 'command': command})
       }
+    } else {
+
+      //Execute Command
+      executeCommand(msg, command, guild).then((response) => {
+        resolve(response)
+      }).catch((err) => {
+        reject(err)
+      })
     }
   })
 }
 
-let executeCommand = function(msg, command) {
+function executeCommand(msg, command, guild) {
   return new Promise((resolve, reject) => {
-    data.usage = data.usage + 1
-    console.log(handlers.logger.info(new Date()) + msg.author.username + '#' + msg.author.discriminator + ' used the following command: [' + msg.content.substr(config.prefix.length) + ']')
-    webServer.updateStats()
-    commands.all[commands.list[command].type][commands.list[command].name].run(msg, data).then((response) => {
-      resolve({'type': 'default', 'response': response, 'command': command})
-    }).catch((err) => {
-      reject(err)
+
+    //Add 1 to the usage
+    stats.usage++
+
+    //Setup data object
+    setupData(msg, command, guild, function(data) {
+
+      //Log command usage
+      console.log(handlers.logger.info(new Date()) + msg.author.username + '#' + msg.author.discriminator + ' used the following command: [' + msg.content.substr(config.prefix.length) + ']')
+
+      //Update stats of webServer
+      webServer.updateStats()
+
+      //Run the command
+      command.run(msg, data).then((response) => {
+        resolve({'type': 'default', 'response': response, 'command': command})
+      }).catch((err) => {
+        reject(err)
+      })
     })
   })
 }

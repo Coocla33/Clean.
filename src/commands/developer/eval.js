@@ -4,7 +4,7 @@ exports.data = {
   'desc': 'Evaluate code.',
   'usage': 'eval (code)',
   'dm': true,
-  'permissions': ['ADMINISTRATOR']
+  'userObjectRequired': true
 }
 
 exports.run = function(msg, data) {

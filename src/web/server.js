@@ -20,6 +20,14 @@ app.get('/', function(req, res) {
   res.sendFile(__dirname + '/public/index.html')
 })
 
+app.get('/invite', function(req, res) {
+  res.redirect('https://discordapp.com/oauth2/authorize?client_id=305821126083215380&scope=bot')
+})
+
+app.get('/support', function(req, res) {
+  res.redirect('https://discord.gg/XUjxMEv')
+})
+
 //Connection
 io.sockets.on('connection', function(socket) {
   connections.push(socket)
@@ -33,7 +41,7 @@ io.sockets.on('connection', function(socket) {
 
   //Get Statistics
   socket.on('getStats', function() {
-    io.sockets.emit('setStats', {'userCount': bot.users.size, 'guildCount': bot.guilds.size, 'channelCount': bot.channels.size, 'commandCount': data.usage, 'uptime': handlers.misc.msToRead(bot.uptime)})
+    io.sockets.emit('updateStats', {'userCount': bot.users.size, 'guildCount': bot.guilds.size, 'channelCount': bot.channels.size, 'commandCount': data.usage})
   })
 
   //Get Commands
@@ -70,5 +78,5 @@ io.sockets.on('connection', function(socket) {
 })
 
 exports.updateStats = function() {
-  io.sockets.emit('updateStats', {'userCount': bot.users.size, 'guildCount': bot.guilds.size, 'channelCount': bot.channels.size, 'commandCount': data.usage, 'uptime': handlers.misc.msToRead(bot.uptime)})
+  io.sockets.emit('updateStats', {'userCount': bot.users.size, 'guildCount': bot.guilds.size, 'channelCount': bot.channels.size, 'commandCount': data.usage})
 }

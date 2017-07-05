@@ -3,6 +3,7 @@ exports.data = {
   'aliases': ['sample'],
   'desc': 'sample text',
   'usage': 'sample text',
+  'userObjectRequired': false,
   'dm': true,
   'new': false,
   'indev': true,
