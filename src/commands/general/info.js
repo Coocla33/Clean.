@@ -19,7 +19,8 @@ exports.run = function(msg, data) {
         '► **' + bot.guilds.size + '** Guilds.\n' +
         '► **' + bot.users.size + '** Users.\n' +
         '► **' + bot.channels.size + '** Channels.\n' +
-        '► **' + handlers.misc.msToRead(bot.uptime) + '** Uptime.\n' +
+        '► **' + handlers.misc.timeToRead(bot.uptime, 'ms') + '** Bot Uptime.\n' +
+        '► **' + handlers.misc.timeToRead(process.uptime(), 's') + '** Process Uptime.\n' +
         '► **' + data.usage + '** Commands used.'
     }
 

@@ -9,6 +9,6 @@ exports.embedColor = function(msg) {
   }
 }
 
-exports.msToRead = function(ms) {
-  return moment.duration(Number(ms), 'ms').format('Y[y], M[MM], d[d], h[h], m[m and] s[s]')
+exports.timeToRead = function(value, unit) {
+  return moment.duration(Number(value), unit).format('Y[y], M[MM], d[d], h[h], m[m and] s[s]')
 }

@@ -2,8 +2,7 @@ exports.data = {
   'name': 'Test',
   'desc': 'Test code',
   'usage': 'test [dunnno, might be something here? help]',
-  'dm': true,
-  'permissions': []
+  'dm': true
 }
 
 const path = require('path')

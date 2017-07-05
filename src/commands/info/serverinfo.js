@@ -1,9 +1,8 @@
 exports.data = {
   'name': 'ServerInfo',
-  'aliases': ['server', 'si'],
+  'aliases': ['server', 'si', 'guild'],
   'desc': 'Showing all the information you need about this server!',
-  'usage': 'serverinfo [full]',
-  'indev': true
+  'usage': 'serverinfo [full]'
 }
 
 exports.run = function(msg, data) {
@@ -22,7 +21,7 @@ exports.run = function(msg, data) {
     server.members.forEach((member) => {
 
       //Sort trough all users and see if they are online
-      if (['online', 'dnd', 'idle'].indexOf(member.presence.status) > -1) {
+      if (['online', 'dnd', 'idle'].indexOf(member.presence.status) > -1 && !member.user.bot) {
         onlineUsers++
       }
 
@@ -36,7 +35,11 @@ exports.run = function(msg, data) {
     messageArray.push('► Id: **' + server.id + '**')
 
     //Users
-    messageArray.push('► Online Users: **' + onlineUsers + '/' + server.members.size + '** *(' + botCount + ' Bots)*')
+    if (botCount > 0) {
+      messageArray.push('► Online Users: **' + onlineUsers + '/' + (server.members.size - botCount) + '** *+' + botCount + ' Bots*')
+    } else {
+      messageArray.push('► Online Users: **' + onlineUsers + '/' + server.members.size + '**')
+    }
 
     //Timeout
     if (server.afkChannelID) {
@@ -83,12 +86,12 @@ exports.run = function(msg, data) {
 
       //Roles
       if (roles.length > 0) {
-        messageArray.push('\n***Roles***\n`' + roles.join('`, `') + '`')
+        messageArray.push('\n**__Roles__**\n`' + roles.join('`, `') + '`')
       }
 
       //Channels
       if (channels.length > 0) {
-        messageArray.push('\n***Text Channels***\nDefault Text Channel: **#' + server.defaultChannel.name + '**\n`' + channels.join('`, `') + '`')
+        messageArray.push('\n**__Text Channels__**\nDefault Text Channel: **#' + server.defaultChannel.name + '**\n`' + channels.join('`, `') + '`')
       }
 
       //Emojis
@@ -96,9 +99,9 @@ exports.run = function(msg, data) {
 
         //Check if emoji starts with the discord emoji pattern thingy
         if (emojis[0].startsWith('<:')) {
-          messageArray.push('\n***Emojis***\n' + emojis.join(' '))
+          messageArray.push('\n**__Emojis__**\n' + emojis.join(' '))
         } else {
-          messageArray.push('\n***Emojis***\n`' + emojis.join('`, `') + '`')
+          messageArray.push('\n**__Emojis__**\n`' + emojis.join('`, `') + '`')
         }
       }
     }
