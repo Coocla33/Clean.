@@ -6,14 +6,15 @@ exports.data = {
   'userObjectRequired': true,
   'dm': true,
   'new': true,
-  'note': '**Settings Types**\n'+
-  '**desc**: *A small description of the user.* \nExample: `I am the greatest!` (Max 512 characters)\n\n' +
-  '**twitter**: *Twitter username.* \nExample: `@Coocla33` (Max 128 characters)\n\n' +
-  '**steam**: *Steam username.* \nExample: `Hardcore Killer` (Max 128 characters)\n\n' +
-  '**youtube**: *YouTube username.* \nExample: `PewDiePie` (Max 128 characters)\n\n' +
-  '**twitch**: *Twitch username.* \nExample: `Cuckinator9000` (Max 128 characters)\n\n' +
-  '**bday**: *Date.* \nExample: `20-12` (Max 64 characters)\n\n' +
-  '**gender**: *Gender type.* \nExample: `Apache attack helicopter.` (Max 128 characters)'
+  'note':
+    '**Settings Types**\n'+
+    '**desc**: *A small description of the user.* \nExample: `I am the greatest!` (Max 512 characters)\n\n' +
+    '**twitter**: *Twitter username.* \nExample: `@Coocla33` (Max 128 characters)\n\n' +
+    '**steam**: *Steam username.* \nExample: `Hardcore Killer` (Max 128 characters)\n\n' +
+    '**youtube**: *YouTube username.* \nExample: `PewDiePie` (Max 128 characters)\n\n' +
+    '**twitch**: *Twitch username.* \nExample: `Cuckinator9000` (Max 128 characters)\n\n' +
+    '**bday**: *Date.* \nExample: `20-12` (Max 64 characters)\n\n' +
+    '**gender**: *Gender type.* \nExample: `Apache attack helicopter.` (Max 128 characters)'
 }
 
 exports.run = function(msg, data) {

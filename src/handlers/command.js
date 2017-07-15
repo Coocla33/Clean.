@@ -290,37 +290,50 @@ function setupData(msg, command, guild, callback) {
   }
 }
 
-function permCheck(msg, perms) {
+function permCheck(msg, userPerms, botPerms) {
 
   //Setup variables
   let userMissing = {'type': 'user', 'array': []}
   let botMissing = {'type': 'bot', 'array': []}
+  let status = {'user': false, 'bot': false}
 
-  //For every permission of permissions
-  for (let perm of perms) {
+  //For every permission of userPermissions
+  for (let perm of userPerms) {
 
     //If user does NOT have perm
     if (msg.guild && !msg.channel.permissionsFor(msg.author).has(perm)) {
       userMissing.array.push(perm)
     }
 
+    //If user is missing more then 0 perms
+    if (userMissing.array.length > 0) {
+      return {'msg': 'User Has No Perms (' + userMissing.array.join(', ') + ')', 'status': false}
+    } else {
+
+      //User has perms
+      status.user = true
+    }
+  }
+
+  for (let perm of botPerms) {
+
     //If bot does NOT have perm
     if (msg.guild && !msg.channel.permissionsFor(bot.user).has(perm)) {
       botMissing.array.push(perm)
     }
 
-    //If user is missing more then 0 perms
-    if (userMissing.array.length > 0) {
-      return {'msg': 'User Has No Perms (' + userMissing.array.join(', ') + ')', 'status': false}
-
-    //If bot is missing more then 0 perms
-    } else if (botMissing.array.length > 0) {
+    if (botMissing.array.length > 0) {
       return {'msg': 'Bot Has No Perms (' + botMissing.array.join(', ') + ')', 'status': false}
     } else {
 
-      //User and Bot have perms
-      return {'status': true}
+      //Bot has perms
+      status.bot = true
     }
+  }
+
+  //Check status
+  if (status.bot == true && status.user == true) {
+    return {'status': true}
   }
 }
 
@@ -328,8 +341,8 @@ function preCommand(msg, command, guild) {
   return new Promise((resolve, reject) => {
 
     //Check permissions
-    if (command.data.permissions) {
-      let perm = permCheck(msg, command.data.permissions)
+    if (command.data.permissionsUser || command.data.permissionsBot) {
+      let perm = permCheck(msg, command.data.permissionsUser, command.data.permissionsBot)
       if (perm.status) {
 
         //Execute Command

@@ -13,10 +13,7 @@ exports.guild = {
             let data = {}
             data.id = guild.id
             data.settings = {}
-            data.settings.prefix = config.prefix
-            data.stats = {}
-            data.stats.messageObjects = []
-            data.stats.activityObjects = []
+            data.settings.prefix = config.prefix 
             guildDB.insert(data, function(err) {
               if (err) {
                 reject(err)

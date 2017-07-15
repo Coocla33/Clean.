@@ -24,10 +24,11 @@ exports.run = function(msg, data) {
           let messageArray = []
 
           //Description
-          messageArray.push('**' + command.desc + '**\n')
+          messageArray.push('__**Description**__')
+          messageArray.push('*' + command.desc + '*\n')
 
           //Usage
-          messageArray.push('***Usage***\n`' + data.guild.settings.prefix + command.usage + '`\n')
+          messageArray.push('__**Usage**__\n`' + data.guild.settings.prefix + command.usage + '`\n')
 
           //DM
           if (command.dm) {
@@ -40,13 +41,21 @@ exports.run = function(msg, data) {
           }
 
           //Permissions
+          if (command.permissionsUser && command.permissionsUser.length > 0) {
+            messageArray.push('► User Permissions: `' + command.permissionsUser.join('`, `') + '`')
+          }
+
+          if (command.permissionsBot && command.permissionsBot.length > 0) {
+            messageArray.push('► Bot Permissions: `' + command.permissionsBot.join('`, `') + '`')
+          }
+
           if (command.permissions && command.permissions.length > 0) {
             messageArray.push('► Permissions: `' + command.permissions.join('`, `') + '`')
           }
 
           //Note
           if (command.note) {
-            messageArray.push('\n***Additional Note***\n' + command.note)
+            messageArray.push('\n__**Additional Note**__\n' + command.note)
           }
 
           //Create embed
