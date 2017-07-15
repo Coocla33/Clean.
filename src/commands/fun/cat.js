@@ -3,8 +3,7 @@ exports.data = {
   'aliases': ['meow'],
   'desc': 'Psst kid! Want to see some pussy?',
   'usage': 'cat',
-  'dm': true,
-  'new': true
+  'dm': true
 }
 
 const superagent = require('superagent')

@@ -291,7 +291,7 @@ function setupData(msg, command, guild, callback) {
 }
 
 function permCheck(msg, userPerms, botPerms) {
-
+  
   //Setup variables
   let userMissing = {'type': 'user', 'array': []}
   let botMissing = {'type': 'bot', 'array': []}
@@ -316,18 +316,27 @@ function permCheck(msg, userPerms, botPerms) {
   }
 
   for (let perm of botPerms) {
-
     //If bot does NOT have perm
     if (msg.guild && !msg.channel.permissionsFor(bot.user).has(perm)) {
       botMissing.array.push(perm)
     }
 
+    //Check if bot is missing any perms
     if (botMissing.array.length > 0) {
       return {'msg': 'Bot Has No Perms (' + botMissing.array.join(', ') + ')', 'status': false}
     } else {
 
       //Bot has perms
       status.bot = true
+    }
+    
+    //Check if user is missing any perms
+    if (userMissing.array.length > 0) {
+      return {'msg': 'User Has No Perms (' + userMissing.array.join(', ') + ')', 'status': false}
+    } else {
+      
+      //user has perms
+      status.user = true
     }
   }
 
