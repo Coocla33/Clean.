@@ -164,13 +164,38 @@ bot.on('disconnect', (event) => {
   console.log(handlers.logger.connect(new Date()) + 'Disconnected! (' + event.code + ')')
 })
 
+bot.on('resume', (replayed) => {
+  console.log(handlers.logger.warn(new Date()) + 'Replayed ' + replayed + ' event(s)')
+})
+
+bot.on('warn', (info) => {
+  console.log(handlers.logger.warn(new Date()) + info)
+})
+
+bot.on('debug', (info) => {
+  if (config.mode == 'development') {
+     console.log(handlers.logger.debug(new Date()) + info)
+  }
+})
+
 //WebServer Stats
 bot.on('guildMemberAvailable', () => {
   webServer.updateStats()
 })
 
-bot.on('guildMemberAdd', () => {
+//Leave/Join messages
+bot.on('guildMemberAdd', (member) => {
   webServer.updateStats()
+
+  if (handlers) {
+    handlers.guild.join(member)
+  }
+})
+
+bot.on('guildMemberRemove', (member) => {
+  if (handlers) {
+    handlers.guild.leave(member)
+  }
 })
 
 bot.on('guildAdd', () => {

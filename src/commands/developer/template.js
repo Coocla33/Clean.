@@ -8,7 +8,8 @@ exports.data = {
   'new': false,
   'indev': true,
   'note': 'This is a template',
-  'permissions': ['SEND_MESSAGES']
+  'permissionsUser': ['ADMINISTRATOR'],
+  'permissionsBot': ['SEND_MESSAGES']
 }
 
 exports.run = function(msg, data) {

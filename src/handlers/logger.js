@@ -20,6 +20,10 @@ exports.connect = function(date) {
   return logTime(date) + chalk.bold.green('[CONNECTION] ')
 }
 
+exports.debug = function(date) {
+  return logTime(date) + chalk.bold.blue('[DEBUG] ')
+}
+
 let logTime = function(date) {
   let seconds = date.getSeconds()
   let minutes = date.getMinutes()

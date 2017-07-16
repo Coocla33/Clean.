@@ -2,8 +2,7 @@ exports.data = {
   'name': '8Ball',
   'desc': 'I shall predict the future!',
   'usage': '8ball',
-  'dm': true,
-  'new': true
+  'dm': true
 }
 
 exports.run = function(msg, data) {
